@@ -1,0 +1,98 @@
+
+<div class="nav">
+  <div class="container  p-0 m-0">
+    <div class="row p-4 mt-2">
+
+        <div class="col-12 text-center">
+            <h3>SMART</h3>
+            <h6 class="font-regular font-color-one">DASHBOARD</h6>
+        </div>
+    </div>
+    <div class="row p-0 m-0">
+       <div class="col-12  p-0 m-0">
+          <ul class="menu">
+              <li id="Dashboard" (click)="showConfig= !showConfig; attributes=[]; showNotify=false;showCommands=false;"><a>Configurações</a></li>
+              <div class="form-group mx-2" *ngIf="showConfig">
+                <label for="orion">Orion Address:</label>
+                <input class="form-control" type="text" [(ngModel)]="urlRequest" id="orion">
+                <label for="service">Fiware Service:</label>
+                <input class="form-control" type="text" [(ngModel)]="service" id="service">
+                <label for="sub">Fiware ServicePath:</label>
+                <input class="form-control" type="text" [(ngModel)]="subservice" id="sub">
+                <label for="external">History External:</label>
+                <input class="form-control" type="text" [(ngModel)]="urlHistoryExternal" id="external">
+                <button (click)="showConfig=false;" class="btn btn-primary my-2" type="button">Definir</button>
+              </div>
+
+              <li id="Emission" (click)="showCommands= !showCommands; attributes=[];showConfig=false;showNotify=false;deviceEntity=-1" ><a>Comando</a></li>
+              <div class="form-group mx-2" *ngIf="showCommands">
+              <div *ngIf="entities.length >= 0">
+                <select  class="form-control mb-2" [(ngModel)]="deviceEntity" name="select" (change)="changeSelect($event.target.value)">
+                  <option value="-1" selected>Selecionar</option>
+                  <option  *ngFor="let e of entities; let i = index" [value]="e.name">{{e.name}}</option>
+                </select>
+              </div>
+              <div *ngIf="this.attributes && this.attributes.length >= 1 ">
+              <select class="form-control mb-2"  [(ngModel)]="deviceAttribute">
+                <option *ngFor="let a of this.attributes; let i = index" [value]="a">{{a}}</option>
+                </select>
+                <label for="valor">Valor:</label>
+                <input class="form-control" type="text" [(ngModel)]="deviceValue" id="valor">
+                <button (click)="execute(); showCommands=false; deviceEntity=-1" [disabled]="deviceEntity==-1" class="btn btn-primary my-2" type="button">Execute</button>
+              </div>
+            </div>
+
+            <li id="Notify" (click)="showNotify= !showNotify; showCommands=false; showConfig=false;deviceEntity=-1" ><a>Notifição</a></li>
+            <div class="form-group mx-2" *ngIf="showNotify">
+            <div *ngIf="entities.length >= 0">
+                <input class="form-control" type="text" [(ngModel)]="urlHistory" id="sub">
+                <select  class="form-control my-2" [(ngModel)]="deviceEntity" name="select" (change)="changeSelect($event.target.value)">
+                  <option value="-1" selected>Selecionar</option>
+                  <option  *ngFor="let e of entities; let i = index" [value]="e.name">{{e.name}}</option>
+                </select>
+                <button (click)="history(); deviceEntity=-1" [disabled]="deviceEntity==-1" class="btn btn-primary my-2" type="button">Notificar</button>
+              </div>
+            </div>
+          </ul>
+
+       </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid left-side p-0 m-0">
+  <div class="row">
+    <div class="col-12 col-md-12 m-4">
+
+
+
+      <div class="font-size-big font-regular mb-3 font-color-two">Dashboard IoT</div>
+
+
+      <div class="container" *ngFor="let item of context; let i = index">
+          <div class="row">
+            <div class="col-12">
+            <div class="font-size-medium font-regular mb-3 font-color-two text-undescore font-italic">{{item.id}} <span class="font-size-normal"> {{item.time  | date:'dd/MM/yyyy HH:mm:ss'}}</span></div>
+            </div>
+          </div>
+          <div class="row">
+          <div *ngFor="let obj of getObject(item.elem); let j = index;">
+
+              <div class="col py-3" *ngIf="isText(item.elem[obj].type)">
+                  <div class="chart-card" style="width: 18rem;height:13rem">
+                      <div  class="text-center text-capitalize font-size-medium font-color-two">{{ obj}}</div>
+                      <h1 class="text-center py-3 font-color-one">{{item.elem[obj].value}}</h1>
+                  </div>
+                </div>
+
+            <app-gauge  *ngIf="j % 2 !== 0 && isNumber(item.elem[obj].type)" [value]="item.elem[obj].value" title="{{ obj}}" [range]="range" bottom="Graus"></app-gauge>
+            <app-graph  *ngIf="j % 2 == 0 && isNumber(item.elem[obj].type)" [value]="item.elem[obj].value" title="{{ obj}}"></app-graph>
+            </div>
+        </div>
+        </div>
+
+
+    </div>
+  </div>
+</div>
+

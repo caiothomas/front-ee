@@ -1,0 +1,142 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif !important;
+  background: -webkit-gradient(linear,right top,left bottom,from(#216e93),color-stop(#21648a),color-stop(#1f5881),color-stop(#172d5b),to(#191c51)) fixed;
+  background: -webkit-linear-gradient(top right,#216e93,#21648a,#1f5881,#172d5b,#191c51) fixed;
+  background: -o-linear-gradient(top right,#216e93,#21648a,#1f5881,#172d5b,#191c51) fixed;
+  background: linear-gradient(to bottom left,#216e93,#21648a,#1f5881,#172d5b,#191c51) fixed;
+}
+
+*{
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.nav {
+  background-color: #181745;
+  color: #fff;
+  width: 280px;
+  top: 0px;
+  right: 0px;
+  position: fixed;
+  height: 100%;
+}
+.left-side {
+  max-width: calc(100% - 300px);
+  width: calc(100% - 300px);
+}
+
+ul.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+ul.menu li {
+  color: white;
+  border-left: 3px solid #83e8a2;
+  box-shadow: inset 1px #83e8a2;
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+  width: 100%;
+}
+
+ul.menu li a {
+  display: block;
+  padding: 10px 0 10px 40px;
+  color: #8c8ba6;
+  font-size: 15px;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+
+ul.menu li::before {
+  content: "";
+  display: block;
+  float: left;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  margin: 8px;
+}
+
+#Dashboard::before {
+  background-image: url('/assets/images/dashboard.svg');
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+}
+
+#Emission::before {
+  background-image: url('/assets/images/emission.svg');
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+}
+
+#Notify::before {
+  background-image: url('/assets/images/notify.svg');
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+}
+
+
+.chart-card {
+  display: block;
+  margin: 0 auto;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: hsla(0,0%,100%,.13);
+}
+
+.chart-title {
+  color: white;
+  text-transform: uppercase;
+  border-bottom: 1px solid  #03022e;
+}
+
+.gauge-chart {
+  color: white !important;
+}
+
+
+ul.menu li a:hover {
+  cursor: pointer;
+  color: white
+}
+
+ul.menu li .active {
+  color: white
+}
+.font-bold {
+  font-weight: 600;
+}
+
+.font-medium {
+  font-weight: 500
+}
+
+.font-regular {
+  font-weight: 400;
+}
+
+.font-size-normal {
+  font-size: 14px;
+}
+
+.font-size-medium  {
+  font-size: 20px;
+}
+
+.font-size-big {
+  font-size:28px;
+}
+
+.font-color-one {
+  color: #e6526d;
+}
+
+.font-color-two {
+  color: white;
+}

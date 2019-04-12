@@ -1,0 +1,15 @@
+<div class="col-12 py-2" *ngIf="multi && view"><div class="chart-card">
+  <div class="text-center font-size-medium font-color-two text-capitalize">{{this.title}}</div>
+  <ngx-charts-line-chart
+  [view]="view"
+  [autoScale]="true"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  legendTitle=""
+  [timeline]="true"
+  [yAxis]="true"
+  [legend]="true"
+  [results]="multi">
+</ngx-charts-line-chart>
+</div>
+</div>
