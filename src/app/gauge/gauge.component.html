@@ -1,6 +1,5 @@
-<div class="col py-2" *ngIf="options">
-  <div class="chart-card">
+<div class="chart-card"  *ngIf="options">
     <rg-gauge-chart [canvasWidth]="canvasWidth" [needleValue]="value" [centralLabel]="centralLabel"
       [options]="options" [name]="name" [bottomLabel]="bottomLabel"></rg-gauge-chart>
-  </div>
 </div>
+

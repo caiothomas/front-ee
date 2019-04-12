@@ -21,7 +21,7 @@
                 <input class="form-control" type="text" [(ngModel)]="subservice" id="sub">
                 <label for="external">History External:</label>
                 <input class="form-control" type="text" [(ngModel)]="urlHistoryExternal" id="external">
-                <button (click)="showConfig=false;" class="btn btn-primary my-2" type="button">Definir</button>
+                <button (click)="getEntity();showConfig=false;" class="btn btn-primary my-2" type="button">Definir</button>
               </div>
 
               <li id="Emission" (click)="showCommands= !showCommands; attributes=[];showConfig=false;showNotify=false;deviceEntity=-1" ><a>Comando</a></li>
@@ -67,27 +67,41 @@
 
 
       <div class="font-size-big font-regular mb-3 font-color-two">Dashboard IoT</div>
+      <div class="container">
+      <div class="row">
+          <div class="col-12">
+              <select  class="form-control mb-2" [(ngModel)]="entitiesSelected" name="entitiesSelected" (change)="changeSelectEntity($event.target.value)">
+                  <option value="-1" selected>Selecionar</option>
+                  <option  *ngFor="let e of entitiesList; let i = index" [value]="e.id">{{e.type}} - {{e.id}}</option>
+                </select>
+
+              </div>
+        </div>
+    </div>
 
 
       <div class="container" *ngFor="let item of context; let i = index">
           <div class="row">
             <div class="col-12">
-            <div class="font-size-medium font-regular mb-3 font-color-two text-undescore font-italic">{{item.id}} <span class="font-size-normal"> {{item.time  | date:'dd/MM/yyyy HH:mm:ss'}}</span></div>
+            <div class="font-size-medium font-regular mb-3 font-color-two text-undescore font-italic">{{item.id}}</div>
             </div>
           </div>
           <div class="row">
-          <div *ngFor="let obj of getObject(item.elem); let j = index;">
+            <div class="col-12">
+              <div class="d-flex flex-row flex-wrap">
+              <ng-container *ngFor="let obj of getObject(item.elem); let j = index;">
 
-              <div class="col py-3" *ngIf="isText(item.elem[obj].type)">
-                  <div class="chart-card" style="width: 18rem;height:13rem">
+                <app-gauge class="mx-2 my-2 p-0" *ngIf="j%2 === 0 && isNumber(item.elem[obj].type)" [value]="item.elem[obj].value" title="{{ obj}}" [range]="range" bottom="Graus"></app-gauge>
+                <app-graph class="mx-2 my-2 p-0" *ngIf="j%2 === 0 && isNumber(item.elem[obj].type)" [value]="item.elem[obj].value" title="{{ obj}}"></app-graph>
+                <div class="mx-2 my-2 p-0"  *ngIf="isText(item.elem[obj].type)">
+                <div class="chart-card">
                       <div  class="text-center text-capitalize font-size-medium font-color-two">{{ obj}}</div>
                       <h1 class="text-center py-3 font-color-one">{{item.elem[obj].value}}</h1>
-                  </div>
                 </div>
-
-            <app-gauge  *ngIf="j % 2 !== 0 && isNumber(item.elem[obj].type)" [value]="item.elem[obj].value" title="{{ obj}}" [range]="range" bottom="Graus"></app-gauge>
-            <app-graph  *ngIf="j % 2 == 0 && isNumber(item.elem[obj].type)" [value]="item.elem[obj].value" title="{{ obj}}"></app-graph>
-            </div>
+              </div>
+              </ng-container>
+          </div>
+        </div>
         </div>
         </div>
 

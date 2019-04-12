@@ -26,6 +26,7 @@
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "core-js": "^2.4.1",
+    "moments": "0.0.2",
     "ng2-charts": "^2.2.2",
     "ngx-trend": "^3.4.1",
     "rxjs": "^5.5.6",

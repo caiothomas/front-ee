@@ -83,9 +83,8 @@ ul.menu li::before {
 
 
 .chart-card {
-  display: block;
-  margin: 0 auto;
   border-radius: 4px;
+  width: 18rem;height:15rem;
   overflow: hidden;
   background-color: hsla(0,0%,100%,.13);
 }

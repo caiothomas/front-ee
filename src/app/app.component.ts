@@ -1,12 +1,15 @@
-import { Component, OnInit, DoCheck, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { Component, OnInit, DoCheck, ChangeDetectorRef, OnChanges, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {RequestOptions, Request, RequestMethod, Headers} from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.None
+
 })
 export class AppComponent implements OnInit, DoCheck, OnChanges  {
 
@@ -20,6 +23,8 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
   public subservice;
   public context = [];
   public entities = [];
+  public entitiesList = [];
+  public entitiesSelected;
   public selectedEntity = {};
   public attributes = [];
   public deviceValue = 'OFF';
@@ -29,6 +34,7 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
   public showCommands = false;
   public showConfig = false;
   public showNotify = false;
+  public interval;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +58,7 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
       }
     });
 
-    setInterval(() => { this.getRequest();}, 1000);
+    this.getEntity();
   }
 
   ngDoCheck(): void {
@@ -63,18 +69,58 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
     this.cd.detectChanges();
   }
 
-  getRequest() {
+  getEntity() {
     this.httpClient.get(this.urlRequest + '/v2/entities/', {
       headers: {'fiware-servicepath': this.subservice, 'fiware-service': this.service}
    }).subscribe((data) => {
      const res = Object.values(data);
      if (res) {
+      this.entitiesList = [];
       for (let i = 0; i < res.length; i++) {
-        const obj = {type: res[0].type, id: res[0].id, time: res[0].TimeInstant.value };
+        const obj = {type: res[i].type, id: res[i].id};
+        this.entitiesList.push(obj);
+      }
+     }
+    });
+  }
 
-        const search = this.context.find(i => i.id === res[0].id);
+  changeSelectEntity($event) {
+    this.entitiesSelected = $event;
+    this.entities = [];
+    this.context = [];
+    if(this.interval){
+      clearInterval(this.interval);
+    }
+    if(this.entitiesSelected){
+      this.interval = setInterval(() => { this.getRequest(this.entitiesSelected);}, 1000);
+    } else {
+      alert('Selecione uma Entidade')
+    }
+  }
+
+
+  getRequest(id) {
+    this.httpClient.get(this.urlRequest + '/v2/entities/'+id, {
+      headers: {'fiware-servicepath': this.subservice, 'fiware-service': this.service}
+   }).subscribe((data) => {
+
+    let res = [data];
+
+     if (res) {
+      const i=0;
+      //for (let i = 0; i < res.length; i++) {
+        const obj = {type: res[i]['type'], id: res[i]['id'] };
+        if(res[i]['TimeInstant']){
+          obj['time'] = new Date(res[i]['TimeInstant'].value);
+        }
+        let search = null;
+        if(res[i]['id']){
+          search = this.context.find(z => z.id === res[i]['id']);
+        }
         if (search) {
-          search.time = res[0].TimeInstant.value;
+          if(res[i]['TimeInstant'] && res[i]['TimeInstant'].value){
+            search.time = res[i]['TimeInstant'].value;
+          }
           const item = JSON.parse(JSON.stringify(res[i]));
           search['elem'] = item;
         } else {
@@ -84,11 +130,10 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
           delete item['type'];
 
           obj['elem'] = item;
-
-          const entity = {name: res[0].id, type: res[0].type, values: this.getObject(item)};
+          const entity = {name: res[i]['id'], type: res[i]['type'], values: this.getObject(item)};
           this.entities.push(entity);
           this.context.push(obj);
-        }
+        //}
       }
      }
     });
@@ -98,8 +143,10 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
     this.attributes = [];
     if ($event) {
       const array = this.entities.find(x => x.name === $event);
-      this.deviceType = array.type;
-      this.attributes = array.values;
+      if(array){
+        this.deviceType = array.type;
+        this.attributes = array.values;
+      }
     }
   }
 

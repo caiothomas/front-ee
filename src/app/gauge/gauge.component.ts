@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectorRef, DoCheck, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, DoCheck, OnChanges, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-gauge',
   templateUrl: './gauge.component.html',
-  styleUrls: ['./gauge.component.css']
+  styleUrls: ['./gauge.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GaugeComponent implements OnInit, DoCheck, OnChanges {
 
