@@ -13,11 +13,11 @@
           <ul class="menu">
               <li id="Dashboard" (click)="showConfig= !showConfig; attributes=[]; showNotify=false;showCommands=false;"><a>Configurações</a></li>
               <div class="form-group mx-2" *ngIf="showConfig">
-                <label for="orion">Orion Address:</label>
-                <input class="form-control" type="text" [(ngModel)]="urlRequest" id="orion">
-                <label for="service">Fiware Service:</label>
+                <label for="addres">Address:</label>
+                <input class="form-control" type="text" [(ngModel)]="urlRequest" id="addres">
+                <label for="service">Service:</label>
                 <input class="form-control" type="text" [(ngModel)]="service" id="service">
-                <label for="sub">Fiware ServicePath:</label>
+                <label for="sub">ServicePath:</label>
                 <input class="form-control" type="text" [(ngModel)]="subservice" id="sub">
                 <label for="external">History External:</label>
                 <input class="form-control" type="text" [(ngModel)]="urlHistoryExternal" id="external">

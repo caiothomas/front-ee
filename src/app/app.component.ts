@@ -42,13 +42,13 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
       if (params && params.s) {
         this.service = params.s;
       } else {
-        this.service = 'fiware';
+        this.service = 'service';
       }
 
       if (params && params.ss) {
         this.subservice = params.ss;
       } else {
-        this.subservice = '/ufu';
+        this.subservice = '/subservice';
       }
     });
 
