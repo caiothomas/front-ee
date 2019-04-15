@@ -242,7 +242,5 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
       console.log("data", data)
     });
 
-    console.log(entity)
-    console.log(obj)
   }
 }

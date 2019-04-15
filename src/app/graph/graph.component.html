@@ -1,6 +1,7 @@
-  <div class="chart-card"   style="width: 1000px;height:450px;"  *ngIf="multi && view">
-  <div class="text-center font-size-medium font-color-two text-capitalize">{{this.title}}</div>
+<div class="chart-card p-0 m-0"  style="display: grid;"  *ngIf="multi && view">
+    <div class="text-center font-size-medium font-color-two text-capitalize">{{this.title}}</div>
   <ngx-charts-line-chart
+  (window:resize)="onResize($event)"
   [view]="view"
   [autoScale]="true"
   [showXAxisLabel]="true"

@@ -56,4 +56,6 @@ export class GraphComponent implements OnInit, DoCheck, OnChanges, AfterViewInit
     }
   }
 
+  onResize(event) { this.view = [event.target.innerWidth - 900, 280 ]; }
+
 }
