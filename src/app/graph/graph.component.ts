@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, DoCheck, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, DoCheck, OnChanges, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
@@ -11,6 +11,8 @@ export class GraphComponent implements OnInit, DoCheck, OnChanges, AfterViewInit
 
   @Input() title;
   @Input() value: number;
+  @Output() requestHistory = new EventEmitter();
+
   public view: any[] = [1000, 400];
   public lastValue = -1;
 
@@ -54,6 +56,10 @@ export class GraphComponent implements OnInit, DoCheck, OnChanges, AfterViewInit
     if (this.title) {
       this.multi[0].name = this.title;
     }
+  }
+
+  history() {
+    this.requestHistory.emit(true);
   }
 
   onResize(event) { this.view = [event.target.innerWidth - 900, 280 ]; }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, DoCheck, OnChanges, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, DoCheck, OnChanges, ViewEncapsulation, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-gauge',
@@ -13,6 +13,7 @@ export class GaugeComponent implements OnInit, DoCheck, OnChanges {
   @Input() color;
   @Input() range;
   @Input() value = 0;
+  @Output() requestHistory = new EventEmitter();
 
   public lastValue = -1;
   public canvasWidth = 300;
@@ -61,5 +62,10 @@ export class GaugeComponent implements OnInit, DoCheck, OnChanges {
     }
 
   }
+
+  history() {
+    this.requestHistory.emit(true);
+  }
+
 
 }

@@ -140,3 +140,7 @@ ul.menu li .active {
 .font-color-two {
   color: white;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

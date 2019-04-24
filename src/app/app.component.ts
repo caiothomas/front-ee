@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {RequestOptions, Request, RequestMethod, Headers} from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+declare var $: any;
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,8 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
   public showConfig = false;
   public showNotify = false;
   public interval;
+  public historyValues = [];
+  public url_atual;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,6 +46,10 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
   ) {}
 
   ngOnInit() {
+    this.url_atual =  window.location.hostname;
+
+    this.urlRequest = 'http://' + this.url_atual + ':1026';
+    this.urlHistoryExternal = 'http://' + this.url_atual + ':8666';
 
     this.route.queryParams.subscribe(params => {
       if (params && params.s) {
@@ -77,7 +84,9 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
      if (res) {
       this.entitiesList = [];
       for (let i = 0; i < res.length; i++) {
-        const obj = {type: res[i].type, id: res[i].id};
+        const item = ["id", "type", "TimeInstant"];
+        const attr = Object.keys(res[i]).filter(x => item.indexOf(x) < 0 );
+        const obj = {type: res[i].type, id: res[i].id, values: attr};
         this.entitiesList.push(obj);
       }
      }
@@ -88,13 +97,23 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
     this.entitiesSelected = $event;
     this.entities = [];
     this.context = [];
-    if(this.interval){
+    if (this.interval) {
       clearInterval(this.interval);
     }
-    if(this.entitiesSelected){
+    if (this.entitiesSelected) {
+      const array = this.entitiesList.find(x => x.id === this.entitiesSelected);
+      if (array) {
+        this.deviceType = array.type;
+        this.attributes = array.values;
+        this.deviceEntity = this.entitiesSelected;
+        const r = confirm("Salvar informações no history?");
+        if (r === true) {
+          this.history();
+        }
+      }
       this.interval = setInterval(() => { this.getRequest(this.entitiesSelected);}, 1000);
     } else {
-      alert('Selecione uma Entidade')
+      alert('Selecione uma Entidade');
     }
   }
 
@@ -110,15 +129,15 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
       const i=0;
       //for (let i = 0; i < res.length; i++) {
         const obj = {type: res[i]['type'], id: res[i]['id'] };
-        if(res[i]['TimeInstant']){
+        if (res[i]['TimeInstant']) {
           obj['time'] = new Date(res[i]['TimeInstant'].value);
         }
         let search = null;
-        if(res[i]['id']){
+        if (res[i]['id']) {
           search = this.context.find(z => z.id === res[i]['id']);
         }
         if (search) {
-          if(res[i]['TimeInstant'] && res[i]['TimeInstant'].value){
+          if (res[i]['TimeInstant'] && res[i]['TimeInstant'].value) {
             search.time = res[i]['TimeInstant'].value;
           }
           const item = JSON.parse(JSON.stringify(res[i]));
@@ -233,14 +252,28 @@ export class AppComponent implements OnInit, DoCheck, OnChanges  {
 
   }
 
-
   view(entity, obj) {
+    this.historyValues = [];
     const url = '/STH/v1/contextEntities/type/' + entity.type + '/id/' + entity.id + '/attributes/' + obj + '?lastN=15';
     this.httpClient.get(this.urlHistoryExternal + url, {
-      headers: {'Access-Control-Allow-Origin': 'http://localhost:4200/'}
+      headers: { 'fiware-servicepath': this.subservice, 'fiware-service': this.service }
     }).subscribe((data) => {
-      console.log("data", data)
+      const result = data['contextResponses'][0].contextElement.attributes[0];
+      if (result) {
+        this.showModal();
+        result.values.forEach(element => {
+          this.historyValues.push(element);
+        });
+      }
     });
 
+  }
+
+  showModal() {
+    $("#myModal").modal('show');
+  }
+
+  hideModal() {
+    document.getElementById('close-modal').click();
   }
 }

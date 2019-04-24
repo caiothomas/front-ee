@@ -1,5 +1,5 @@
 <div class="chart-card p-0 m-0"  style="display: grid;"  *ngIf="multi && view">
-    <div class="text-center font-size-medium font-color-two text-capitalize">{{this.title}}</div>
+    <div (click)="history()" class="cursor-pointer text-center font-size-medium font-color-two text-capitalize">{{this.title}}</div>
   <ngx-charts-line-chart
   (window:resize)="onResize($event)"
   [view]="view"
